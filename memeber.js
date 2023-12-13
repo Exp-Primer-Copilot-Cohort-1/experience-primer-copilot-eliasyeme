@@ -1,8 +1,12 @@
 function skillsMember() {
-    var skills = document.getElementById("skills");
-    var skillsMember = "";
-    for (var i = 0; i < member.skills.length; i++) {
-        skillsMember += "<span>" + member.skills[i] + "</span>";
-    }
-    skills.innerHTML = skillsMember;
+  const member = document.querySelectorAll('.member');
+  const memberSkills = document.querySelectorAll('.member__skills');
+  const memberSkillsBtn = document.querySelectorAll('.member__skills-btn');
+
+  member.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      memberSkills[index].classList.toggle('member__skills--active');
+      memberSkillsBtn[index].classList.toggle('member__skills-btn--active');
+    });
+  });
 }
