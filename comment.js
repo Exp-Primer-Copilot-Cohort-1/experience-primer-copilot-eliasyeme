@@ -1,133 +1,76 @@
-Synthesizing 10/10 solutions
+// Create web server
+// Run: node comments.js
+// Open browser: http://localhost:3000
 
-=======
-Suggestion 1
+var http = require('http');
+var fs = require('fs');
+var path = require('path');
+var mime = require('mime');
+var comments = require('./comments');
 
-function skillsMember() {
-    var member = {
-        name: "Hoàng Văn Tuyền",
-        age: 22,
-        skills: ["HTML", "CSS", "JavaScript", "ReactJS", "NodeJS", "PHP", "MySQL"]
-    };
-    var name = document.getElementById("name");
-    name.innerHTML = member.name;
-    var age = document.getElementById("age");
-    age.innerHTML = member.age;
-
-=======
-Suggestion 2
-
-function skillsMember() {
-    var member = {
-        name: "Nguyễn Văn A",
-        age: 20,
-        skills: ["Lập trình", "Chơi game", "Đọc sách"]
+var server = http.createServer(function(req, res) {
+    if (req.url === '/' || req.url === '/index.html') {
+        fs.readFile('./index.html', function(err, data) {
+            res.writeHead(200, {
+                'Content-Type': 'text/html'
+            });
+            res.write(data);
+            res.end();
+        });
+    } else if (req.url === '/comments.json') {
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify(comments));
+        res.end();
+    } else if (req.url === '/comments.html') {
+        fs.readFile('./comments.html', function(err, data) {
+            res.writeHead(200, {
+                'Content-Type': 'text/html'
+            });
+            res.write(data);
+            res.end();
+        });
+    } else if (req.url === '/comments.js') {
+        fs.readFile('./comments.js', function(err, data) {
+            res.writeHead(200, {
+                'Content-Type': 'text/javascript'
+            });
+            res.write(data);
+            res.end();
+        });
+    } else if (req.url === '/comments.css') {
+        fs.readFile('./comments.css', function(err, data) {
+            res.writeHead(200, {
+                'Content-Type': 'text/css'
+            });
+            res.write(data);
+            res.end();
+        });
+    } else if (req.url === '/comments') {
+        if (req.method === 'POST') {
+            var body = '';
+            req.on('data', function(data) {
+                body += data;
+            });
+            req.on('end', function() {
+                comments.push(JSON.parse(body));
+                res.writeHead(200, {
+                    'Content-Type': 'application/json'
+                });
+                res.write(JSON.stringify(comments));
+                res.end();
+            });
+        }
+    } else {
+        res.writeHead(404, {
+            'Content-Type': 'text/plain'
+        });
+        res.write('404 Not Found');
+        res.end();
     }
+});
 
-=======
-Suggestion 3
-
-function skillsMember() {
-    var member = {
-        name: "Nguyễn Văn A",
-        age: 20,
-        skills: ["HTML", "CSS", "JS", "PHP"]
-    };
-
-=======
-Suggestion 4
-
-function skillsMember() {
-    var member = {
-        name: "Nguyen Thanh Tuan",
-        age: 23,
-        skills: ["HTML", "CSS", "JS", "PHP", "C#"]
-    };
-    var name = document.getElementById("name");
-    name.innerHTML = member.name;
-    var age = document.getElementById("age");
-    age.innerHTML = member.age;
-
-=======
-Suggestion 5
-
-function skillsMember() {
-    var member = {
-        name: "Nguyễn Văn A",
-        age: 25,
-        skills: [
-            "HTML",
-            "CSS",
-            "JS",
-            "PHP"
-        ]
-    };
-
-=======
-Suggestion 6
-
-function skillsMember() {
-    var member = {
-        name: "John",
-        skills: ["JavaScript", "CSS", "HTML"]
-    };
-    // var skills = document.getElementById("skills");
-    // var skillsMember = "";
-    // for (var i = 0; i < member.skills.length; i++) {
-    //     skillsMember += "<span>" + member.skills[i] + "</span>";
-    // }
-    // skills.innerHTML = skillsMember;
-    return member.skills;
-}
-
-=======
-Suggestion 7
-
-function skillsMember() {
-    var member = {
-        name: "Nguyễn Đức Mạnh",
-        age: 20,
-        skills: ["HTML", "CSS", "JS"]
-    };
-
-=======
-Suggestion 8
-
-function skillsMember() {
-    var member = {
-        name: "Nguyễn Văn A",
-        age: 20,
-        skills: ["HTML", "CSS", "JS"]
-    };
-
-=======
-Suggestion 9
-
-function skillsMember() {
-    // Path: member.js
-    var member = {
-        name: "Nguyễn Văn A",
-        age: 20,
-        skills: ["HTML", "CSS", "JS"],
-        avatar: "https://picsum.photos/200/200"
-    };
-    var name = document.getElementById("name");
-    name.innerText = member.name;
-    var age = document.getElementById("age");
-    age.innerText = member.age;
-    var avatar = document.getElementById("avatar");
-    avatar.src = member.avatar;
-
-=======
-Suggestion 10
-
-function skillsMember() {
-    var member = {
-        name: "Nguyen Van A",
-        age: 20,
-        skills: ["HTML", "CSS", "JS", "PHP", "C++"]
-    };
-    var name = document.getElementById("name");
-    name.innerHTML = member.name;
-    var age = document.getElementById("age");
-    age.innerHTML = member.age;
+server.listen(3000, function() {
+    console.log('Server running at http://localhost:3000');
+});
